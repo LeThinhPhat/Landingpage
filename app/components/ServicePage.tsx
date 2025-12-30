@@ -121,8 +121,7 @@ export default function ServicePage() {
       </div>
 
       {/* Main Grid */}
-      <main className="container mx-auto px-6 sm:px-12 lg:px-24">
-        {/* Mobile: Horizontal Scroll / Desktop: Grid */}
+      <main className=" mx-auto px-6 sm:px-12 lg:px-24">
         <div className="mb-12">
           {/* Mobile View - Horizontal Scroll */}
           <div className="md:hidden overflow-x-auto pb-4 -mx-6 px-6">
@@ -138,8 +137,8 @@ export default function ServicePage() {
             </div>
           </div>
 
-          {/* Desktop View - Grid */}
-          <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Desktop View - Auto-fit Grid (card rộng hơn) */}
+          <div className="hidden md:grid [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] gap-6">
             {displayedServices.map((service) => (
               <ServiceCard
                 key={service.id}
@@ -212,7 +211,6 @@ export default function ServicePage() {
           </div>
 
           <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Left side */}
             <div className="text-center md:text-left">
               <div className="inline-block mb-3">
                 <div className="h-1.5 w-20 bg-gradient-to-r from-yellow-400 to-yellow-500 mb-4 rounded-full" />
@@ -225,7 +223,6 @@ export default function ServicePage() {
               </p>
             </div>
 
-            {/* Right side - Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/contact"
@@ -248,7 +245,6 @@ export default function ServicePage() {
   );
 }
 
-// Separate ServiceCard component for reusability
 interface ServiceCardProps {
   service: Service;
   isActive: boolean;
@@ -257,25 +253,30 @@ interface ServiceCardProps {
 
 function ServiceCard({ service, isActive, onActivate }: ServiceCardProps) {
   return (
-    <a
+    <Link
+      // Xóa tooltip “title” (nếu browser/extension gây lỗi font)
+      title=""
+      aria-label={`Open ${service.domain}`}
       href={`https://${service.domain}`}
       target="_blank"
       rel="noopener noreferrer"
+      prefetch={false}
       onMouseDown={onActivate}
       onTouchStart={onActivate}
+      onFocus={onActivate}
       className={`group relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl shadow-lg transition-all duration-500 cursor-pointer block transform hover:-translate-y-2 border-2 outline-none focus:outline-none focus-visible:outline-none active:border-yellow-400 hover:border-yellow-400 ${
         isActive ? "border-yellow-400 shadow-yellow-400/20" : "border-gray-900"
-      } md:flex-shrink-0 w-full md:w-auto`}
+      }
+      // Tăng chiều ngang card: mobile set width cố định, desktop full theo grid
+      flex-shrink-0 w-[320px] sm:w-[360px] md:w-full`}
       style={{ outline: "none" }}
     >
       {/* Gradient overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/0 to-yellow-500/0 group-hover:from-yellow-400/5 group-hover:to-yellow-500/10 transition-all duration-500" />
 
-      {/* Card Content */}
       <div className="relative p-8">
         {/* Flag & Market */}
         <div className="mb-6">
-          {/* Flag */}
           <div className="flex justify-center mb-5">
             <div className="relative">
               <div className="absolute inset-0 bg-yellow-400/20 blur-xl rounded-full" />
@@ -287,7 +288,6 @@ function ServiceCard({ service, isActive, onActivate }: ServiceCardProps) {
             </div>
           </div>
 
-          {/* Market Badge */}
           <div className="text-center">
             <span className="inline-block bg-gradient-to-r from-yellow-500 to-yellow-400 text-white px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider shadow-md">
               {service.market}
@@ -300,9 +300,8 @@ function ServiceCard({ service, isActive, onActivate }: ServiceCardProps) {
           {service.description}
         </p>
 
-        {/* Specialties Section */}
+        {/* Specialties */}
         <div className="mb-6">
-          {/* Specialty Grid */}
           <div className="grid grid-cols-2 gap-3">
             {service.specialties.map((specialty, index) => {
               const IconComponent = specialty.icon;
@@ -358,6 +357,6 @@ function ServiceCard({ service, isActive, onActivate }: ServiceCardProps) {
 
       {/* Hover indicator */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-    </a>
+    </Link>
   );
 }
