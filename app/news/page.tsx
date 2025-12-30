@@ -1,8 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import {
   Search,
   Clock,
@@ -13,22 +12,15 @@ import {
   Newspaper,
   ChevronRight,
 } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
-interface Post {
-  id: string;
-  title: string;
-  excerpt: string;
-  image: string;
-  category: string;
-  minutes: number;
-  date: string;
-}
-
-interface TrendingPost {
-  id: string;
-  title: string;
-  date: string;
-}
+/**
+ * New.tsx — Next.js (App Router)
+ * - Link: next/link
+ * - Image: next/image
+ * ⚠️ Nếu dùng ảnh từ domain ngoài → nhớ add domain vào next.config.js
+ */
 
 const CATEGORIES = [
   "Tất cả",
@@ -40,7 +32,7 @@ const CATEGORIES = [
   "Case study",
 ];
 
-const POSTS: Post[] = [
+const POSTS = [
   {
     id: "p1",
     title: "Cập nhật lịch bay Nhật → Việt dịp cuối năm (slot gia tăng)",
@@ -104,7 +96,7 @@ const POSTS: Post[] = [
   },
 ];
 
-const TRENDING: TrendingPost[] = [
+const TRENDING = [
   { id: "t1", title: "Cập nhật quy định pin lithium", date: "2025-11-07" },
   { id: "t2", title: "Giảm 10% cước tuyến Nhật tuần 47", date: "2025-11-06" },
   { id: "t3", title: "Case: mỹ phẩm HQ xử lý tem nhãn", date: "2025-11-02" },
@@ -127,7 +119,7 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.55 } },
 };
 
-export default function NewsPage() {
+const New = () => {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("Tất cả");
 
@@ -149,10 +141,12 @@ export default function NewsPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-amber-50/30">
-      {/* ===================== HEADER ĐỒNG BỘ ===================== */}
+      {/* HEADER */}
       <section className="relative overflow-hidden mb-12 lg:mb-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        {/* Highlight amber giống các page khác */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/25 via-transparent to-transparent" />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] 
+          from-amber-500/25 via-transparent to-transparent"
+        />
 
         <div className="relative max-w-5xl mx-auto px-6 py-16 lg:py-24">
           <motion.div
@@ -161,17 +155,12 @@ export default function NewsPage() {
             transition={{ duration: 0.6 }}
             className="space-y-5 text-white text-left"
           >
-            {/* Eyebrow label */}
             <p className="text-xs md:text-sm font-semibold tracking-[0.25em] text-amber-300 uppercase">
               Tiximax Logistics
             </p>
-
-            {/* Main Heading */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight">
               Tin tức & Bản tin Tiximax
             </h1>
-
-            {/* Sub description */}
             <p className="text-sm sm:text-base text-gray-200 max-w-3xl leading-relaxed">
               Cập nhật lịch bay, case thực tế và insight logistics đa quốc gia
               giúp bạn tối ưu dòng hàng & chi phí vận hành.
@@ -179,9 +168,8 @@ export default function NewsPage() {
           </motion.div>
         </div>
       </section>
-      {/* ===================================================== */}
 
-      {/* HERO FEATURED (big image with overlay) */}
+      {/* HERO FEATURED */}
       <section className="relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 pb-10 lg:pb-16">
           <div className="grid lg:grid-cols-3 gap-6">
@@ -192,12 +180,19 @@ export default function NewsPage() {
               animate="show"
               className="lg:col-span-2 relative rounded-3xl overflow-hidden border border-gray-200 shadow-sm"
             >
-              <img
-                src={featured.image}
-                alt={featured.title}
-                className="w-full h-[360px] object-cover"
-              />
+              <div className="relative w-full h-[360px]">
+                <Image
+                  src={featured.image}
+                  alt={featured.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  priority
+                />
+              </div>
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
               <div className="absolute bottom-0 p-6 md:p-8 text-white">
                 <span className="inline-flex items-center gap-2 text-xs font-semibold bg-amber-500/90 rounded-full px-3 py-1">
                   <Newspaper className="w-3.5 h-3.5" /> {featured.category}
@@ -210,10 +205,11 @@ export default function NewsPage() {
                 </p>
                 <div className="mt-3 flex items-center gap-4 text-xs text-white/80">
                   <span className="inline-flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" /> {featured.minutes}' đọc
+                    <Clock className="w-3.5 h-3.5" /> {featured.minutes} đọc
                   </span>
                   <span>{featured.date}</span>
                 </div>
+
                 <Link
                   href={`/news/${featured.id}`}
                   className="mt-4 inline-flex items-center gap-2 text-sm font-semibold hover:underline"
@@ -223,7 +219,7 @@ export default function NewsPage() {
               </div>
             </motion.article>
 
-            {/* Sidebar: search + trending */}
+            {/* Sidebar */}
             <aside className="lg:col-span-1">
               <motion.div
                 variants={fadeUp}
@@ -240,6 +236,7 @@ export default function NewsPage() {
                     className="w-full text-sm outline-none"
                   />
                 </div>
+
                 <div className="mt-4">
                   <h3 className="text-sm font-bold text-gray-900">
                     Đang thịnh hành
@@ -292,7 +289,7 @@ export default function NewsPage() {
         </div>
       </section>
 
-      {/* FILTER TABS + TOP STORIES (horizontal cards) */}
+      {/* FILTER + TOP STORIES */}
       <section className="pt-6 lg:pt-8 pb-8">
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <div className="flex flex-wrap items-center gap-2">
@@ -309,12 +306,14 @@ export default function NewsPage() {
                 {c}
               </button>
             ))}
+
             <button
               onClick={() => {
                 setCat("Tất cả");
                 setQ("");
               }}
               className="ml-auto flex items-center gap-2 text-sm text-gray-600 hover:text-amber-700"
+              type="button"
             >
               <RefreshCcw className="w-4 h-4" /> Reset
             </button>
@@ -327,27 +326,36 @@ export default function NewsPage() {
                   key={p.id}
                   className="w-[280px] flex-shrink-0 rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-sm"
                 >
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    className="w-full h-40 object-cover"
-                  />
+                  <div className="relative w-full h-40">
+                    <Image
+                      src={p.image}
+                      alt={p.title}
+                      fill
+                      className="object-cover"
+                      sizes="280px"
+                    />
+                  </div>
+
                   <div className="p-5">
                     <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
                       <Tag className="w-3 h-3" /> {p.category}
                     </span>
+
                     <h3 className="mt-2 text-sm font-bold text-gray-900 line-clamp-2">
                       {p.title}
                     </h3>
+
                     <p className="mt-1 text-xs text-gray-600 line-clamp-2">
                       {p.excerpt}
                     </p>
+
                     <div className="mt-2 flex items-center justify-between text-[11px] text-gray-500">
                       <span className="inline-flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> {p.minutes}'
+                        <Clock className="w-3 h-3" /> {p.minutes}
                       </span>
                       <span>{p.date}</span>
                     </div>
+
                     <Link
                       href={`/news/${p.id}`}
                       className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-amber-700"
@@ -362,7 +370,7 @@ export default function NewsPage() {
         </div>
       </section>
 
-      {/* MASONRY GRID (two heights) */}
+      {/* GRID */}
       <section className="pb-14">
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -376,15 +384,18 @@ export default function NewsPage() {
                 className="group rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm"
               >
                 <div className={`relative ${idx % 3 === 0 ? "h-64" : "h-48"}`}>
-                  <img
+                  <Image
                     src={p.image}
                     alt={p.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <span className="absolute left-3 top-3 inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700 bg-amber-50/90 px-2 py-0.5 rounded-full">
                     <Tag className="w-3 h-3" /> {p.category}
                   </span>
                 </div>
+
                 <div className="p-4">
                   <h3 className="text-base font-extrabold text-gray-900 line-clamp-2 group-hover:underline">
                     {p.title}
@@ -392,12 +403,14 @@ export default function NewsPage() {
                   <p className="mt-1 text-sm text-gray-600 line-clamp-2">
                     {p.excerpt}
                   </p>
+
                   <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
                     <span className="inline-flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" /> {p.minutes}'
+                      <Clock className="w-3.5 h-3.5" /> {p.minutes}
                     </span>
                     <span>{p.date}</span>
                   </div>
+
                   <Link
                     href={`/news/${p.id}`}
                     className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-amber-700"
@@ -409,19 +422,20 @@ export default function NewsPage() {
             ))}
           </div>
 
-          {/* Tags cloud */}
+          {/* Tags */}
           <div className="mt-10 flex flex-wrap items-center gap-2">
             {TAGS.map((t) => (
               <button
                 key={t}
                 className="px-3 py-1.5 rounded-full text-xs bg-white border border-gray-200 text-gray-700 hover:border-amber-300"
+                type="button"
               >
                 #{t}
               </button>
             ))}
           </div>
 
-          {/* Pagination (static UI demo) */}
+          {/* Pagination (demo UI) */}
           <div className="mt-8 flex justify-center gap-2">
             {Array.from({ length: 5 }).map((_, i) => (
               <button
@@ -431,6 +445,7 @@ export default function NewsPage() {
                     ? "bg-amber-500 text-white border-amber-500"
                     : "bg-white text-gray-700 border-gray-200 hover:border-amber-300"
                 }`}
+                type="button"
               >
                 {i + 1}
               </button>
@@ -440,4 +455,6 @@ export default function NewsPage() {
       </section>
     </main>
   );
-}
+};
+
+export default New;

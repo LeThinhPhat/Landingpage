@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Mail,
@@ -11,29 +11,18 @@ import {
   Instagram,
   Linkedin,
 } from "lucide-react";
+import Image from "next/image";
+
+// ✅ đổi đúng path theo project bạn (asset hoặc assets)
+import contact from "@/public/assets/contact.png";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
-} as const; // ✅ FIX: Thêm as const
+};
 
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-}
-
-interface SocialLink {
-  Icon: any;
-  href: string;
-  label: string;
-}
-
-export default function ContactPage() {
-  const [form, setForm] = useState<FormData>({
+const Contact = () => {
+  const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -67,13 +56,12 @@ export default function ContactPage() {
   };
 
   const handle =
-    (key: keyof FormData) =>
+    (key: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((s) => ({ ...s, [key]: e.target.value }));
     };
 
-  // Social links
-  const socials: SocialLink[] = [
+  const socials = [
     {
       Icon: Facebook,
       href: "https://www.facebook.com/tiximaxlogistics",
@@ -93,9 +81,8 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-amber-50/30 text-gray-900">
-      {/* ========= HEADER – ĐỒNG BỘ VỚI CÁC PAGE KHÁC ========= */}
+      {/* HEADER */}
       <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        {/* Vệt sáng amber giống các page khác */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500/25 via-transparent to-transparent" />
 
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
@@ -122,11 +109,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ========= MAIN CONTENT ========= */}
+      {/* MAIN */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
         {/* TOP ROW */}
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14">
-          {/* LEFT — COMPANY INFO */}
+          {/* LEFT — INFO */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -221,11 +208,16 @@ export default function ContactPage() {
             animate="show"
             className="bg-white rounded-2xl shadow-sm border border-amber-100 overflow-hidden min-h-[520px]"
           >
-            <img
-              src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=800&h=1000&fit=crop"
-              alt="Contact Banner"
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-[520px]">
+              <Image
+                src={contact}
+                alt="Contact Banner"
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           </motion.div>
         </div>
 
@@ -241,12 +233,12 @@ export default function ContactPage() {
             <iframe
               title="Map"
               src="https://maps.google.com/maps?q=65%20Đ.%209,%20Hiệp%20Bình%20Phước,%20Thủ%20Đức,%20Hồ%20Chí%20Minh&t=&z=15&ie=UTF8&iwloc=&output=embed"
-              className="w-full h-full"
+              className="w-full h-[520px]"
               loading="lazy"
             />
           </motion.div>
 
-          {/* CONTACT FORM */}
+          {/* FORM */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -260,15 +252,15 @@ export default function ContactPage() {
             <form onSubmit={onSubmit} className="mt-9 space-y-7">
               {/* Row 1 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {(["firstName", "lastName"] as const).map((key, i) => (
-                  <div key={i}>
+                {(["firstName", "lastName"] as const).map((key) => (
+                  <div key={key}>
                     <label className="block text-sm font-semibold uppercase mb-2 text-gray-700">
                       {key === "firstName" ? "Tên" : "Họ"}
                     </label>
                     <input
                       value={form[key]}
                       onChange={handle(key)}
-                      className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all outline-none"
+                      className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all"
                       placeholder={key === "firstName" ? "Nhập tên" : "Nhập họ"}
                     />
                   </div>
@@ -277,15 +269,15 @@ export default function ContactPage() {
 
               {/* Row 2 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {(["email", "phone"] as const).map((key, i) => (
-                  <div key={i}>
+                {(["email", "phone"] as const).map((key) => (
+                  <div key={key}>
                     <label className="block text-sm font-semibold uppercase mb-2 text-gray-700">
                       {key === "email" ? "Email" : "Số điện thoại"}
                     </label>
                     <input
                       value={form[key]}
                       onChange={handle(key)}
-                      className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all outline-none"
+                      className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all"
                       placeholder={
                         key === "email"
                           ? "email@example.com"
@@ -304,7 +296,7 @@ export default function ContactPage() {
                 <input
                   value={form.subject}
                   onChange={handle("subject")}
-                  className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all outline-none"
+                  className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all"
                   placeholder="Nhập chủ đề"
                 />
               </div>
@@ -318,7 +310,7 @@ export default function ContactPage() {
                   rows={7}
                   value={form.message}
                   onChange={handle("message")}
-                  className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm resize-none bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all outline-none"
+                  className="w-full border border-amber-200 rounded-lg px-4 py-3 text-sm resize-none bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-500 transition-all"
                   placeholder="Nhập tin nhắn..."
                 />
               </div>
@@ -345,4 +337,6 @@ export default function ContactPage() {
       </section>
     </main>
   );
-}
+};
+
+export default Contact;

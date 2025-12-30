@@ -1,19 +1,24 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
+
+// ✅ đổi đúng folder của bạn: app/asset (hoặc app/assets)
+import PICCEO from "@/public/assets/PICCEO.png";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-} as const;
+};
 
 const labelAnim = {
   hidden: { opacity: 0, y: 12 },
   show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
-} as const;
+};
 
-export default function Vision() {
+const Vision = () => {
   return (
     <main className="bg-gradient-to-b from-white via-gray-50 to-white py-16 sm:py-20 lg:py-28">
       <div className="px-4">
@@ -24,7 +29,6 @@ export default function Vision() {
           viewport={{ once: true }}
           className="text-center"
         >
-          <div className="h-1 w-20 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto mb-4 rounded-full" />
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-gray-900">
             Hiểu Thêm Về <span className="text-yellow-400">Chúng Tôi</span>
           </h1>
@@ -37,6 +41,7 @@ export default function Vision() {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto text-center mt-6 text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed"
         >
+          <div className="h-1 w-20 bg-gradient-to-r from-yellow-400 to-yellow-500 mx-auto mb-4 rounded-full"></div>
           Chúng tôi tin rằng một doanh nghiệp bền vững không chỉ dựa vào lợi
           nhuận, mà dựa vào con người và những giá trị cốt lõi. Tiximax mang sứ
           mệnh kết nối thế giới bằng logistics,thanh toán toàn cầu.
@@ -46,16 +51,24 @@ export default function Vision() {
       <section className="relative max-w-5xl mx-auto mt-12 sm:mt-16 lg:mt-20 px-4">
         {/* Ảnh CEO */}
         <div className="flex justify-center">
-          <img
-            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&h=500&fit=crop"
-            alt="CEO"
+          <div
             className="
+              relative
               w-[240px] h-[240px]
               sm:w-[320px] sm:h-[320px]
               lg:w-[430px] lg:h-[430px]
-              object-cover rounded-full
+              rounded-full overflow-hidden
             "
-          />
+          >
+            <Image
+              src={PICCEO}
+              alt="CEO"
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 640px) 240px, (max-width: 1024px) 320px, 430px"
+            />
+          </div>
         </div>
 
         {/* ===== MOBILE: text grid ===== */}
@@ -334,4 +347,6 @@ export default function Vision() {
       </section>
     </main>
   );
-}
+};
+
+export default Vision;

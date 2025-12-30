@@ -1,12 +1,12 @@
-// import About from "./components/About";
+import About from "./components/About";
 // import SideMenu from "./components/SideMenu";
 import ServicePage from "./components/ServicePage";
-// import Feedback from "./components/Feedback";
-// import QuestionPage from "./components/QuestionPage";
-// import ReasonPage from "./components/ReasonPage";
+import Feedback from "./components/Feedback";
+import QuestionPage from "./components/QuestionPage";
+import ReasonPage from "./components/ReasonPage";
 import Service from "./components/Service";
-// import PartnerPage from "./components/PartnerPage";
-// import PromotionPage from "./components/PromotionPage";
+import PartnerPage from "./components/PartnerPage";
+import PromotionPage from "./components/PromotionPage";
 // import ChatBoxList from "./components/ChatBoxList";
 import Vision from "./components/Vision";
 
@@ -17,7 +17,7 @@ export default function Home() {
       {/* <SideMenu /> */}
 
       {/* About section */}
-      {/* <About /> */}
+      <About />
 
       {/* Service Page section - Dịch vụ quốc tế */}
       <ServicePage />
@@ -29,19 +29,19 @@ export default function Home() {
       <Service />
 
       {/* Reason Page section - Lý do chọn TixiMax */}
-      {/* <ReasonPage /> */}
+      <ReasonPage />
 
       {/* Question Page section - FAQ & Báo giá */}
-      {/* <QuestionPage /> */}
+      <QuestionPage />
 
       {/* Feedback Page section - Đánh giá khách hàng */}
-      {/* <Feedback /> */}
+      <Feedback />
 
       {/* Partner Page section - FAQ & Báo giá */}
-      {/* <PartnerPage /> */}
+      <PartnerPage />
 
       {/* Promotion Page section - Khuyến mãi */}
-      {/* <PromotionPage /> */}
+      <PromotionPage />
 
       {/* Chat hỗ trợ nổi góc phải */}
       {/* <ChatBoxList
